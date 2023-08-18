@@ -1,10 +1,11 @@
 import React from 'react'
 import axios from "axios";
 import PropTypes from 'prop-types';
-import { useContext, useState } from "react";
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-
-const Login = ({ setToken, setUser }) => {
+import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/Auth';
+const Login = () => {
+  const { setToken, setUser } = useAuth();
   const [credentials, setCredentials] = useState({
     username: undefined,
     password: undefined,
@@ -16,19 +17,17 @@ const Login = ({ setToken, setUser }) => {
   const handleClick = async (e) => {
     e.preventDefault();
     try {
-      // const res = await axios.post("http://localhost:3000/auth/login", credentials);
-      // console.log(res)
-      // if (res.status === 200) {
-      //   setToken(res.data.accessToken)
-      //   user = res.data.message
-        if(credentials.username === 'admin' && credentials.password ==='password'){
-          setUser({username: credentials.username})
-          navigate("/dashboard")      
-        }
-        else{
-          // 
-          navigate("/")      
-        }
+      const res = await axios.post("http://localhost:3000/auth/login", credentials);
+      console.log(res)
+      if (res.status === 200) {
+        setToken(res.data.accessToken);
+        setUser(res.data.message);
+        navigate('/dashboard');       
+      }
+      else{
+        navigate('/')
+      }
+
     } catch (err) {
       console.log(err)
     }
@@ -44,7 +43,7 @@ const Login = ({ setToken, setUser }) => {
               type="text"
               id="username"
               name="username"
-              class="mt-1 px-3 py-2 w-full border rounded-lg focus:ring focus:ring-indigo-200"
+              class="text-black mt-1 px-3 py-2 w-full border rounded-lg focus:ring focus:ring-indigo-200"
               placeholder="Enter your username"
               onChange={handleChange} />
           </div>
@@ -54,7 +53,7 @@ const Login = ({ setToken, setUser }) => {
               type="password"
               id="password"
               name="password"
-              class="mt-1 px-3 py-2 w-full border rounded-lg focus:ring focus:ring-indigo-200"
+              class="text-black mt-1 px-3 py-2 w-full border rounded-lg focus:ring focus:ring-indigo-200"
               placeholder="Enter your password"
               onChange={handleChange} />
           </div>

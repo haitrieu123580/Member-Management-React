@@ -14,21 +14,21 @@ const UserForm = ({ onSave, initialValues, hideForm }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if((formData.username == null ) || (formData.email == null) || (formData.gender ==null)){
+    if ((formData.username == null) || (formData.email == null) || (formData.gender == null)) {
       alert(`Missing User Info`);
     }
-    else{
-    onSave(formData);
-    setFormData({});
-    hideForm()
+    else {
+      onSave(formData);
+      setFormData({});
+      hideForm()
     }
 
   };
 
   return (
     <>
-      <div 
-        className="min-w-screen h-screen animated fadeIn faster fixed left-1/2 top-1/2 flex justify-center items-center inset-0 z-50 outline-none focus:outline-none bg-no-repeat bg-center bg-cover  -translate-y-1/2 -translate-x-1/2" 
+      <div
+        className="min-w-screen h-screen animated fadeIn faster fixed left-1/2 top-1/2 flex justify-center items-center inset-0 z-50 outline-none focus:outline-none bg-no-repeat bg-center bg-cover  -translate-y-1/2 -translate-x-1/2"
         id="modal-id">
         <div className="absolute opacity-80 inset-0 z-0"></div>
         <div className="w-full max-w-lg p-5 relative mx-auto my-auto rounded-xl shadow-lg bg-slate-500">
@@ -41,12 +41,33 @@ const UserForm = ({ onSave, initialValues, hideForm }) => {
                   className="text-black"
                   type="text"
                   name="username"
-                  id='name'
+                  id='username'
                   placeholder={formData.username || ''}
                   onChange={handleInputChange}
                 />
               </div>
-
+              <div class="flex flex-col">
+                <label for="password" class="">Password</label>
+                <input
+                  className="text-black"
+                  type="password"
+                  name="password"
+                  id='password'
+                  placeholder={formData.password || ''}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div class="flex flex-col">
+                <label for="confirmPassword" class="">Confirm Password</label>
+                <input
+                  className="text-black"
+                  type="password"
+                  name="confirmPassword"
+                  id='confirmPassword'
+                  placeholder={formData.confirmPassword || ''}
+                  onChange={handleInputChange}
+                />
+              </div>
               <div class="flex flex-col">
                 <label for="gender" class="">Email</label>
                 <input
@@ -59,8 +80,31 @@ const UserForm = ({ onSave, initialValues, hideForm }) => {
                 />
               </div>
               <div class="flex flex-col">
-                <label for="email" class="">Email</label>
+                <label for="name" class="">Full name</label>
+                <input
+                  className="text-black"
+                  type="text"
+                  name="name"
+                  id='name'
+                  placeholder={formData.name || ''}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div class="flex flex-col">
+                <label for="age" class="">Age</label>
+                <input
+                  className="text-black"
+                  type="number"
+                  name="age"
+                  id='age'
+                  placeholder={formData.age || ''}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div class="flex flex-col">
+                <label for="gender" class="">Gender</label>
                 <select
+                id='gender'
                   className="text-black"
                   name="gender" // This name should match the property name in formData
                   value={formData.gender || ''}
@@ -83,9 +127,9 @@ const UserForm = ({ onSave, initialValues, hideForm }) => {
                 className="mb-2 md:mb-0 bg-red-500 border border-red-500 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-red-600"
                 type="button"
                 onClick={() => {
-                  setFormData({}); 
+                  setFormData({});
                   hideForm();
-              }}
+                }}
               >
                 Cancel
               </button>
