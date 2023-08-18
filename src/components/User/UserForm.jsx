@@ -27,7 +27,9 @@ const UserForm = ({ onSave, initialValues, hideForm }) => {
 
   return (
     <>
-      <div className="min-w-screen h-screen animated fadeIn faster fixed left-0 top-0 flex justify-center items-center inset-0 z-50 outline-none focus:outline-none bg-no-repeat bg-center bg-cover" id="modal-id">
+      <div 
+        className="min-w-screen h-screen animated fadeIn faster fixed left-1/2 top-1/2 flex justify-center items-center inset-0 z-50 outline-none focus:outline-none bg-no-repeat bg-center bg-cover  -translate-y-1/2 -translate-x-1/2" 
+        id="modal-id">
         <div className="absolute opacity-80 inset-0 z-0"></div>
         <div className="w-full max-w-lg p-5 relative mx-auto my-auto rounded-xl shadow-lg bg-slate-500">
           <form onSubmit={handleSubmit} className='flex-col justify-center'>

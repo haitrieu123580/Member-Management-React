@@ -1,10 +1,14 @@
 import React from 'react'
-const Home = () => {
+import Sidebar from '../../components/Sidebar/Sidebar'
+const Home = ({user}) => {
     return (
-        <div className='flex items-center'>
-            This is Home Page
-
+        <div class="h-full ml-14 mt-14 mb-10 md:ml-64">
+        <h1>Home</h1>
+        <div className=" ">
+            {/* <Sidebar user={user}/> */}
         </div>
+  
+      </div>
     )
 }
 

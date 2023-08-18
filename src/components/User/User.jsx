@@ -12,7 +12,7 @@ const User = ({user,onClick,onDeleteUser}) => {
     <td class="text-sm text-white-900 px-6 py-4 whitespace-nowrap">
       {user.email}
     </td>
-    <td class="text-sm text-white-900 x-6 py-4 whitespace-nowrap">
+    <td class="text-sm text-white-900 px-6 py-4 whitespace-nowrap">
       {user.gender}
     </td>
     <td class="text-sm text-white-900 px-6 py-4 whitespace-nowrap">
