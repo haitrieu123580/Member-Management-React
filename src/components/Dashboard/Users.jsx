@@ -10,19 +10,18 @@ const Users = () => {
     const [isEdit, setIsEdit] = useState(false);
     const [users, setUsers] = useState([]);
     const { token } = useAuth()
-    // console.log(token)
+    console.log(token)
     const handleSave = async (formData) => {
         if (editUser === null) {
             try {
-                const res = await axios.post('http://localhost:3000/users/create-user', {
+                console.log(formData);
+                const res = await axios.post('http://localhost:3000/users/create-user', formData, {
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify(formData)
+                    }
                 });
-                console.log(formData)
-                console.log(res)
+
                 if (res.status === 200) {
                     setUsers((prevUsers) => {
                         const newUser = { ...formData };
@@ -31,19 +30,35 @@ const Users = () => {
                     });
                 }
             } catch (error) {
-
+                // Handle error here, you can log it or display a message to the user
+                console.error('Error creating user:', error);
             }
         } else {
-            setUsers((prevUsers) => {
-                const updatedUsers = prevUsers.map((user) =>
-                    user === editUser ? { ...user, ...formData } : user
-                );
-                localStorage.setItem('users', JSON.stringify(updatedUsers));
-                return updatedUsers;
-            });
-            setEditUser(null);
+            try {
+                const res = await axios.put(`http://localhost:3000/users/${editUser.id}`, formData, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (res.status === 200) {
+                    setUsers((prevUsers) => {
+                        const updatedUsers = prevUsers.map((user) =>
+                            user.id === editUser.id ? { ...user, ...formData } : user
+                        );
+
+                        localStorage.setItem('users', JSON.stringify(updatedUsers));
+                        return updatedUsers;
+                    });
+                    setEditUser(null);
+                }
+            } catch (error) {
+                // Handle error here, you can log it or display a message to the user
+                console.error('Error updating user:', error);
+            }
         }
     };
+
 
     const handleEdit = (user) => {
         setEditUser(user);

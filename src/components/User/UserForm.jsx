@@ -1,28 +1,31 @@
 import React, { useState } from 'react';
 
 const UserForm = ({ onSave, initialValues, hideForm }) => {
-  const [formData, setFormData] = useState(initialValues || {});
+  const [formData, setFormData] = useState(initialValues || {
+    gender: 'false'
+  });
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type } = e.target;
+    const updatedValue = type === 'checkbox' ? e.target.checked : value;
+
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: updatedValue,
     }));
   };
 
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    if ((formData.username == null) || (formData.email == null) || (formData.gender == null)) {
+    if (!formData.username || !formData.email) {
       alert(`Missing User Info`);
-    }
-    else {
+    } else {
+      formData.gender = formData.gender === 'true' ? true : false
+      formData.age = parseInt(formData.age)
       onSave(formData);
       setFormData({});
-      hideForm()
+      hideForm();
     }
-
   };
 
   return (
@@ -97,23 +100,40 @@ const UserForm = ({ onSave, initialValues, hideForm }) => {
                   type="number"
                   name="age"
                   id='age'
-                  placeholder={formData.age || ''}
+                  min={18}
+                  max={100}
+                  placeholder={formData.age}
                   onChange={handleInputChange}
                 />
               </div>
-              <div class="flex flex-col">
-                <label for="gender" class="">Gender</label>
-                <select
-                id='gender'
-                  className="text-black"
-                  name="gender" // This name should match the property name in formData
-                  value={formData.gender || ''}
-                  onChange={handleInputChange}
-                >
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                </select>
-
+              <div className="flex flex-col">
+                <label htmlFor="gender">Gender</label>
+                <div className="flex items-center">
+                  <input
+                    type="radio"
+                    id="male"
+                    name="gender"
+                    value="false" // Use 'false' as the value
+                    checked={formData.gender === 'false' || formData.gender === false} // Check against the string 'false'
+                    onChange={handleInputChange}
+                  />
+                  <label htmlFor="male" className="ml-2">
+                    Male
+                  </label>
+                </div>
+                <div className="flex items-center">
+                  <input
+                    type="radio"
+                    id="female"
+                    name="gender"
+                    value="true" // Use 'true' as the value
+                    checked={formData.gender === 'true' || formData.gender === true} // Check against the string 'true'
+                    onChange={handleInputChange}
+                  />
+                  <label htmlFor="female" className="ml-2">
+                    Female
+                  </label>
+                </div>
               </div>
             </div>
             <div className="p-3 mt-2 text-center space-x-4 md:block">
