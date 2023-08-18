@@ -1,10 +1,9 @@
 import React from 'react'
-import axios from "axios";
 import PropTypes from 'prop-types';
-import { useContext, useState } from "react";
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 
-const Login = ({ setToken, setUser }) => {
+const Login = ({ setUser }) => {
   const [credentials, setCredentials] = useState({
     username: undefined,
     password: undefined,
@@ -16,17 +15,11 @@ const Login = ({ setToken, setUser }) => {
   const handleClick = async (e) => {
     e.preventDefault();
     try {
-      // const res = await axios.post("http://localhost:3000/auth/login", credentials);
-      // console.log(res)
-      // if (res.status === 200) {
-      //   setToken(res.data.accessToken)
-      //   user = res.data.message
         if(credentials.username === 'admin' && credentials.password ==='password'){
           setUser({username: credentials.username})
           navigate("/dashboard")      
         }
         else{
-          // 
           navigate("/")      
         }
     } catch (err) {
