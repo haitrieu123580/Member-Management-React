@@ -51,7 +51,6 @@ const Users = () => {
                             user.id === editUser.id ? { ...user, ...formData } : user
                         );
 
-                        localStorage.setItem('users', JSON.stringify(updatedUsers));
                         return updatedUsers;
                     });
                     setEditUser(null);
