@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import User from '../User/User';
 import ButtonAddUser from '../User/ButtonAddUser';
 import UserForm from '../User/UserForm';
+import Error from '../Error/Error';
 import { useAuth } from '../../context/Auth';
 import axios from 'axios';
 const Users = () => {
@@ -9,25 +10,27 @@ const Users = () => {
     const [editUser, setEditUser] = useState(null);
     const [isEdit, setIsEdit] = useState(false);
     const [users, setUsers] = useState([]);
+    const [message, setMessage] = useState(null)
     const { token } = useAuth()
-    console.log(token)
     const handleSave = async (formData) => {
         if (editUser === null) {
             try {
-                console.log(formData);
                 const res = await axios.post('http://localhost:3000/users/create-user', formData, {
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
                     }
                 });
-
+                console.log(res)
                 if (res.status === 200) {
                     setUsers((prevUsers) => {
                         const newUser = { ...formData };
                         const updatedUsers = [...prevUsers, newUser];
                         return updatedUsers;
                     });
+                }
+                else if(res.status ===400){
+                    setMessage(res.message)
                 }
             } catch (error) {
                 // Handle error here, you can log it or display a message to the user
@@ -41,6 +44,7 @@ const Users = () => {
                         'Authorization': `Bearer ${token}`
                     }
                 });
+                console.log(res)
                 if (res.status === 200) {
                     setUsers((prevUsers) => {
                         const updatedUsers = prevUsers.map((user) =>
@@ -51,6 +55,9 @@ const Users = () => {
                         return updatedUsers;
                     });
                     setEditUser(null);
+                }
+                else if(res.status ===400){
+                    alert('et o et')
                 }
             } catch (error) {
                 // Handle error here, you can log it or display a message to the user
@@ -82,19 +89,20 @@ const Users = () => {
 
             }
         } catch (error) {
-            console.log(error)
+            console.log(error);
+            setMessage(error)
         }
     };
 
     useEffect(() => {
-        axios.get('http://localhost:3000/users/get-users', {
+        axios.get('http://localhost:3000/users/get-all', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         })
             .then(response => {
                 console.log(response)
-                setUsers(response.data.users);
+                setUsers(response.data.data);
             })
             .catch(error => {
                 console.error('Error fetching users:', error);
@@ -121,6 +129,7 @@ const Users = () => {
                                 hideForm={() => setShowForm(false)}
                             />
                         )}
+                        {message && <Error message={message} />}
                     </div>
                     <table className="w-full">
                         <thead>
@@ -146,7 +155,7 @@ const Users = () => {
                             {users.map((user) => (
                                 <User
                                     user={user}
-                                    key={user.id}
+                                    key={user.username}
                                     onClick={() => {
                                         handleEdit(user);
                                         setShowForm(true);

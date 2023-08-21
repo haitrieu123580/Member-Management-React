@@ -18,11 +18,12 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await axios.post("http://localhost:3000/auth/login", credentials);
-      console.log(res)
+      console.log(res.data.message)
       if (res.status === 200) {
         setToken(res.data.accessToken);
         setUser(res.data.message);
-        navigate('/dashboard');       
+        localStorage.setItem('accessToken', res.data.accessToken)
+        navigate('/home');       
       }
       else{
         navigate('/')
@@ -34,33 +35,33 @@ const Login = () => {
   };
   return (
     <div className='h-screen flex justify-center items-center'>
-      <div class="bg-white p-8 rounded shadow-md w-96 h-fit">
-        <h1 class="text-2xl font-semibold mb-4">Login</h1>
+      <div className="bg-white p-8 rounded shadow-md w-96 h-fit">
+        <h1 className="text-2xl font-semibold mb-4">Login</h1>
         <form>
-          <div class="mb-4">
-            <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+          <div className="mb-4">
+            <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username</label>
             <input
               type="text"
               id="username"
               name="username"
-              class="text-black mt-1 px-3 py-2 w-full border rounded-lg focus:ring focus:ring-indigo-200"
+              className="text-black mt-1 px-3 py-2 w-full border rounded-lg focus:ring focus:ring-indigo-200"
               placeholder="Enter your username"
               onChange={handleChange} />
           </div>
-          <div class="mb-4">
-            <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+          <div className="mb-4">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
             <input
               type="password"
               id="password"
               name="password"
-              class="text-black mt-1 px-3 py-2 w-full border rounded-lg focus:ring focus:ring-indigo-200"
+              className="text-black mt-1 px-3 py-2 w-full border rounded-lg focus:ring focus:ring-indigo-200"
               placeholder="Enter your password"
               onChange={handleChange} />
           </div>
           <button
             onClick={handleClick}
             type="submit"
-            class="w-full bg-indigo-500 text-white rounded-lg py-2 hover:bg-indigo-600 focus:outline-none focus:ring focus:ring-indigo-200">
+            className="w-full bg-indigo-500 text-white rounded-lg py-2 hover:bg-indigo-600 focus:outline-none focus:ring focus:ring-indigo-200">
             Log in
           </button>
         </form>
