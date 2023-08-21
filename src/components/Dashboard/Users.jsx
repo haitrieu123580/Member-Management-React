@@ -2,54 +2,111 @@ import React, { useState, useEffect } from 'react';
 import User from '../User/User';
 import ButtonAddUser from '../User/ButtonAddUser';
 import UserForm from '../User/UserForm';
-import usersData from '../../assets/userData'; 
-
+import Error from '../Error/Error';
+import { useAuth } from '../../context/Auth';
+import axios from 'axios';
 const Users = () => {
     const [showForm, setShowForm] = useState(false);
     const [editUser, setEditUser] = useState(null);
     const [isEdit, setIsEdit] = useState(false);
-    const [users, setUsers] = useState(usersData);
-
-    const handleSave = (formData) => {
+    const [users, setUsers] = useState([]);
+    const [message, setMessage] = useState(null)
+    const { token } = useAuth()
+    const handleSave = async (formData) => {
         if (editUser === null) {
-            // Add new user
-            const id = Math.floor(Math.random() * 10000) + 1;
-            // const newUser = { ...formData, id };
-            setUsers((prevUsers) => {
-                const newUser = { ...formData, id };
-                const updatedUsers = [...prevUsers, newUser];
-                localStorage.setItem('users', JSON.stringify(updatedUsers));
-                return updatedUsers;
-            });
+            try {
+                const res = await axios.post('http://localhost:3000/users/create-user', formData, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                console.log(res)
+                if (res.status === 200) {
+                    setUsers((prevUsers) => {
+                        const newUser = { ...formData };
+                        const updatedUsers = [...prevUsers, newUser];
+                        return updatedUsers;
+                    });
+                }
+                else if(res.status ===400){
+                    setMessage(res.message)
+                }
+            } catch (error) {
+                // Handle error here, you can log it or display a message to the user
+                console.error('Error creating user:', error);
+            }
         } else {
-            setUsers((prevUsers) => {
-                const updatedUsers = prevUsers.map((user) =>
-                    user === editUser ? { ...user, ...formData } : user
-                );
-                localStorage.setItem('users', JSON.stringify(updatedUsers));
-                return updatedUsers;
-            });
-            setEditUser(null);
+            try {
+                const res = await axios.put(`http://localhost:3000/users/${editUser.id}`, formData, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                console.log(res)
+                if (res.status === 200) {
+                    setUsers((prevUsers) => {
+                        const updatedUsers = prevUsers.map((user) =>
+                            user.id === editUser.id ? { ...user, ...formData } : user
+                        );
+
+                        localStorage.setItem('users', JSON.stringify(updatedUsers));
+                        return updatedUsers;
+                    });
+                    setEditUser(null);
+                }
+                else if(res.status ===400){
+                    alert('et o et')
+                }
+            } catch (error) {
+                // Handle error here, you can log it or display a message to the user
+                console.error('Error updating user:', error);
+            }
         }
     };
+
 
     const handleEdit = (user) => {
         setEditUser(user);
     };
 
-    const deleteUser = (id) => {
-        setUsers((prevUsers) => {
-            const updatedUsers = prevUsers.filter((user) => user.id !== id);
-            localStorage.setItem('users', JSON.stringify(updatedUsers));
-            return updatedUsers;
-        });
+    const deleteUser = async (id) => {
+        try {
+            const res = await axios.delete(`http://localhost:3000/users/${id}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            console.log(res)
+            if (res.status === 200) {
+                setUsers((prevUsers) => {
+                    const updatedUsers = prevUsers.filter((user) => user.id !== id);
+                    return updatedUsers;
+                });
+            }
+            else if (res.status === 404) {
+
+            }
+        } catch (error) {
+            console.log(error);
+            setMessage(error)
+        }
     };
 
     useEffect(() => {
-        const storedUsers = localStorage.getItem('users');
-        if (storedUsers) {
-            setUsers(JSON.parse(storedUsers));
-        }
+        axios.get('http://localhost:3000/users/get-all', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then(response => {
+                console.log(response)
+                setUsers(response.data.data);
+            })
+            .catch(error => {
+                console.error('Error fetching users:', error);
+            });
     }, []);
 
     return (
@@ -72,13 +129,14 @@ const Users = () => {
                                 hideForm={() => setShowForm(false)}
                             />
                         )}
+                        {message && <Error message={message} />}
                     </div>
                     <table className="w-full">
                         <thead>
                             <tr className="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-                                <th scope="col" className="text-lg font-medium text-white-900 px-6 py-4 text-left">
+                                {/* <th scope="col" className="text-lg font-medium text-white-900 px-6 py-4 text-left">
                                     #
-                                </th>
+                                </th> */}
                                 <th scope="col" className="text-lg font-medium text-white-900 px-6 py-4 text-left">
                                     User name
                                 </th>
@@ -97,7 +155,7 @@ const Users = () => {
                             {users.map((user) => (
                                 <User
                                     user={user}
-                                    key={user.id}
+                                    key={user.username}
                                     onClick={() => {
                                         handleEdit(user);
                                         setShowForm(true);
