@@ -1,14 +1,10 @@
-import React from 'react'
 
 import { useNavigate } from 'react-router-dom';
-// import { useAuth } from '../../context/Auth';
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { userLogin } from '../../features/auth/authAction'
 import { useEffect } from 'react'
 import Error from '../../components/Error/Error';
 import Spinner from '../../components/Spinner/Spinner';
-
 const Login = () => {
   const { loading, userInfo, error } = useSelector((state) =>  state.auth)
   const dispatch = useDispatch()
@@ -25,7 +21,7 @@ const Login = () => {
   }, [navigate, userInfo])
 
   const submitForm = (data) => {
-    dispatch(userLogin(data))
+    dispatch({ type: 'auth/login', payload: data });
   }
   return (
     <div className='h-screen flex justify-center items-center'>
@@ -69,8 +65,5 @@ const Login = () => {
   )
 }
 
-// Login.propTypes = {
-//   setToken: PropTypes.func.isRequired
-// };
 
 export default Login

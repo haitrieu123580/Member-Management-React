@@ -2,10 +2,6 @@ import React, { useState, useEffect } from 'react';
 import User from '../User/User';
 import ButtonAddUser from '../User/ButtonAddUser';
 import UserForm from '../User/UserForm';
-import Error from '../Error/Error';
-// import { useAuth } from '../../context/Auth';
-// import axios from 'axios';
-import { fetchUsers, createUser, updateUser, deleteUserAction } from '../../features/userList/usersAction';
 import { useSelector, useDispatch } from 'react-redux';
 
 const Users = () => {
@@ -17,14 +13,22 @@ const Users = () => {
 
     const dispatch = useDispatch();
     useEffect(() => {
-        // console.log(userToken)
-        dispatch(fetchUsers({accessToken: userToken}));
+        dispatch({type:'usersList/fetchUsers',payload:{
+            accessToken: userToken
+        }});
       }, [dispatch, userToken]);
     const handleSave = async (formData) => {
         if (editUser === null) {
-            dispatch(createUser({formData: formData, accessToken: userToken}))
+            dispatch({type:'usersList/createUser', payload:{
+                formData: formData,
+                accessToken: userToken
+            }})
         } else {
-            dispatch(updateUser({formData: formData, accessToken: userToken, userId: parseInt(editUser.id)}))
+            dispatch({type:'usersList/updateUser', payload:{
+                userId: editUser.id,
+                accessToken: userToken, 
+                formData: formData
+            }})
             setEditUser(null);
         }
     };
@@ -35,7 +39,11 @@ const Users = () => {
     };
 
     const deleteUser = async (id) => {
-        dispatch(deleteUserAction({accessToken: userToken, userId: id}))
+        dispatch({type:'usersList/deleteUser',payload:{
+            userId: id,
+            accessToken: userToken
+        }})
+        // dispatch(deleteUserSaga({accessToken: userToken, userId: id}))
     };
     return (
         <div className="h-full ml-14 mt-14 mb-10 md:ml-64 relative">
