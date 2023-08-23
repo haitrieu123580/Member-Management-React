@@ -77,7 +77,7 @@ function* deleteUserSaga(action) {
     yield call(axios.delete, `${backendURL}/users/${userId}`, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-      },
+      },    
     });
 
     yield put(deleteUserFromState(userId));
