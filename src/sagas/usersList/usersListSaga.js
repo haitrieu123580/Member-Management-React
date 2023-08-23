@@ -20,7 +20,7 @@ function* fetchUsersSaga(action) {
 
     yield put(setUsers(response.data.data));
   } catch (error) {
-    // Handle error if needed
+    alert(error.response.data.message)
   }
 }
 
@@ -43,7 +43,7 @@ function* createUserSaga(action) {
     const user = response.data.data;
     yield put(addUser(user));
   } catch (error) {
-    // Handle error if needed
+    alert(error.response.data)
   }
 }
 
@@ -66,7 +66,7 @@ function* updateUserSaga(action) {
     const updatedUser = response.data.data;
     yield put(updateUserInState({ userId, updatedData: updatedUser }));
   } catch (error) {
-    // Handle error if needed
+    alert(error.response.data)
   }
 }
 
@@ -82,7 +82,7 @@ function* deleteUserSaga(action) {
 
     yield put(deleteUserFromState(userId));
   } catch (error) {
-    // Handle error if needed
+    alert(error.response.data)
   }
 }
 

@@ -24,6 +24,7 @@ function* userLoginSaga(action) {
   } catch (error) {
     if (error.response && error.response.data.message) {
       // Xử lý lỗi nếu cần
+        alert(error.response.data.message)
     }
   }
 }
@@ -34,7 +35,6 @@ export function* watchUserLogin() {
 }
 
 function* userLogoutSaga() {
-    console.log(`logout`)
   yield takeLatest(logout());
 }
 

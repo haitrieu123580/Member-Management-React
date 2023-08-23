@@ -8,10 +8,10 @@ const Navbar = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate();
   const handleLogout = () => {
-    console.log('click')
     dispatch(logout())
-    // navigate('/login'); // Chuyển hướng đến trang đăng nhập sau khi đăng xuất
+     // Chuyển hướng đến trang đăng nhập sau khi đăng xuất
     window.location.reload()
+    navigate('/');
   };
   return (
 
