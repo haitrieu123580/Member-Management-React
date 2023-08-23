@@ -3,66 +3,29 @@ import User from '../User/User';
 import ButtonAddUser from '../User/ButtonAddUser';
 import UserForm from '../User/UserForm';
 import Error from '../Error/Error';
-import { useAuth } from '../../context/Auth';
-import axios from 'axios';
+// import { useAuth } from '../../context/Auth';
+// import axios from 'axios';
+import { fetchUsers, createUser, updateUser, deleteUserAction } from '../../features/userList/usersAction';
+import { useSelector, useDispatch } from 'react-redux';
+
 const Users = () => {
     const [showForm, setShowForm] = useState(false);
     const [editUser, setEditUser] = useState(null);
     const [isEdit, setIsEdit] = useState(false);
-    const [users, setUsers] = useState([]);
-    const [message, setMessage] = useState(null)
-    const { token } = useAuth()
+    const usersList = useSelector(state => state.usersList);
+    const { userToken } = useSelector((state) =>  state.auth)
+
+    const dispatch = useDispatch();
+    useEffect(() => {
+        // console.log(userToken)
+        dispatch(fetchUsers({accessToken: userToken}));
+      }, [dispatch, userToken]);
     const handleSave = async (formData) => {
         if (editUser === null) {
-            try {
-                const res = await axios.post('http://localhost:3000/users/create-user', formData, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                console.log(res)
-                if (res.status === 200) {
-                    setUsers((prevUsers) => {
-                        const newUser = { ...formData };
-                        const updatedUsers = [...prevUsers, newUser];
-                        return updatedUsers;
-                    });
-                }
-                else if(res.status ===400){
-                    setMessage(res.message)
-                }
-            } catch (error) {
-                // Handle error here, you can log it or display a message to the user
-                console.error('Error creating user:', error);
-            }
+            dispatch(createUser({formData: formData, accessToken: userToken}))
         } else {
-            try {
-                const res = await axios.put(`http://localhost:3000/users/${editUser.id}`, formData, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                console.log(res)
-                if (res.status === 200) {
-                    setUsers((prevUsers) => {
-                        const updatedUsers = prevUsers.map((user) =>
-                            user.id === editUser.id ? { ...user, ...formData } : user
-                        );
-
-                        localStorage.setItem('users', JSON.stringify(updatedUsers));
-                        return updatedUsers;
-                    });
-                    setEditUser(null);
-                }
-                else if(res.status ===400){
-                    alert('et o et')
-                }
-            } catch (error) {
-                // Handle error here, you can log it or display a message to the user
-                console.error('Error updating user:', error);
-            }
+            dispatch(updateUser({formData: formData, accessToken: userToken, userId: parseInt(editUser.id)}))
+            setEditUser(null);
         }
     };
 
@@ -72,43 +35,8 @@ const Users = () => {
     };
 
     const deleteUser = async (id) => {
-        try {
-            const res = await axios.delete(`http://localhost:3000/users/${id}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            })
-            console.log(res)
-            if (res.status === 200) {
-                setUsers((prevUsers) => {
-                    const updatedUsers = prevUsers.filter((user) => user.id !== id);
-                    return updatedUsers;
-                });
-            }
-            else if (res.status === 404) {
-
-            }
-        } catch (error) {
-            console.log(error);
-            setMessage(error)
-        }
+        dispatch(deleteUserAction({accessToken: userToken, userId: id}))
     };
-
-    useEffect(() => {
-        axios.get('http://localhost:3000/users/get-all', {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-            .then(response => {
-                console.log(response)
-                setUsers(response.data.data);
-            })
-            .catch(error => {
-                console.error('Error fetching users:', error);
-            });
-    }, []);
-
     return (
         <div className="h-full ml-14 mt-14 mb-10 md:ml-64 relative">
             <div className="w-full overflow-hidden rounded-lg shadow-xs">
@@ -129,7 +57,6 @@ const Users = () => {
                                 hideForm={() => setShowForm(false)}
                             />
                         )}
-                        {message && <Error message={message} />}
                     </div>
                     <table className="w-full">
                         <thead>
@@ -152,7 +79,7 @@ const Users = () => {
                             </tr>
                         </thead>
                         <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                            {users.map((user) => (
+                            {usersList.map((user) => (
                                 <User
                                     user={user}
                                     key={user.username}

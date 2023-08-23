@@ -1,7 +1,5 @@
 import React from 'react'
-// import axios from "axios";
-// import PropTypes from 'prop-types';
-// import { useState } from "react";
+
 import { useNavigate } from 'react-router-dom';
 // import { useAuth } from '../../context/Auth';
 import { useForm } from 'react-hook-form'
@@ -10,36 +8,9 @@ import { userLogin } from '../../features/auth/authAction'
 import { useEffect } from 'react'
 import Error from '../../components/Error/Error';
 import Spinner from '../../components/Spinner/Spinner';
-const Login = () => {
-  // const { setToken, setUser } = useAuth();
-  // const [credentials, setCredentials] = useState({
-  //   username: undefined,
-  //   password: undefined,
-  // });
-  // const handleChange = (e) => {
-  //   setCredentials((prev) => ({ ...prev, [e.target.id]: e.target.value }));
-  // };
-  // const navigate = useNavigate();
-  // const handleClick = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const res = await axios.post("http://localhost:3000/auth/login", credentials);
-  //     console.log(res.data.message)
-  //     if (res.status === 200) {
-  //       setToken(res.data.accessToken);
-  //       setUser(res.data.message);
-  //       localStorage.setItem('accessToken', res.data.accessToken)
-  //       navigate('/home');       
-  //     }
-  //     else{
-  //       navigate('/')
-  //     }
 
-  //   } catch (err) {
-  //     console.log(err)
-  //   }
-  // };
-  const { loading, userInfo, error } = useSelector((state) => state.auth)
+const Login = () => {
+  const { loading, userInfo, error } = useSelector((state) =>  state.auth)
   const dispatch = useDispatch()
 
   const { register, handleSubmit } = useForm()
@@ -49,7 +20,7 @@ const Login = () => {
   // redirect authenticated user to profile screen
   useEffect(() => {
     if (userInfo) {
-      navigate('/dashboard')
+      navigate('/home')
     }
   }, [navigate, userInfo])
 

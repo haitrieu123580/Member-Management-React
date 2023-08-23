@@ -4,6 +4,7 @@ const UserForm = ({ onSave, initialValues, hideForm }) => {
   const [formData, setFormData] = useState(initialValues || {
     gender: 'false'
   });
+  const hasInitialValues = !!initialValues;
 
   const handleInputChange = (e) => {
     const { name, value, type } = e.target;
@@ -49,7 +50,8 @@ const UserForm = ({ onSave, initialValues, hideForm }) => {
                   onChange={handleInputChange}
                 />
               </div>
-              <div class="flex flex-col">
+              {!hasInitialValues && (<>
+                <div class="flex flex-col">
                 <label for="password" class="">Password</label>
                 <input
                   className="text-black"
@@ -71,6 +73,8 @@ const UserForm = ({ onSave, initialValues, hideForm }) => {
                   onChange={handleInputChange}
                 />
               </div>
+              </>)}
+              
               <div class="flex flex-col">
                 <label for="gender" class="">Email</label>
                 <input
