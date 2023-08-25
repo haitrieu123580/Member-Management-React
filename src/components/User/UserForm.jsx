@@ -39,8 +39,8 @@ const UserForm = ({ onSave, initialValues, hideForm }) => {
           <form onSubmit={handleSubmit} className='flex-col justify-center'>
             <div className="">
               <h1>User Form</h1>
-              <div class="flex flex-col">
-                <label for="name" class="">Name</label>
+              <div className="flex flex-col">
+                <label htmlFor="name" className="">Name</label>
                 <input
                   className="text-black"
                   type="text"
@@ -51,8 +51,8 @@ const UserForm = ({ onSave, initialValues, hideForm }) => {
                 />
               </div>
               {!hasInitialValues && (<>
-                <div class="flex flex-col">
-                <label for="password" class="">Password</label>
+                <div className="flex flex-col">
+                <label htmlFor="password" className="">Password</label>
                 <input
                   className="text-black"
                   type="password"
@@ -62,8 +62,8 @@ const UserForm = ({ onSave, initialValues, hideForm }) => {
                   onChange={handleInputChange}
                 />
               </div>
-              <div class="flex flex-col">
-                <label for="confirmPassword" class="">Confirm Password</label>
+              <div className="flex flex-col">
+                <label htmlFor="confirmPassword" className="">Confirm Password</label>
                 <input
                   className="text-black"
                   type="password"
@@ -75,8 +75,8 @@ const UserForm = ({ onSave, initialValues, hideForm }) => {
               </div>
               </>)}
               
-              <div class="flex flex-col">
-                <label for="gender" class="">Email</label>
+              <div className="flex flex-col">
+                <label htmlFor="gender" className="">Email</label>
                 <input
                   className="text-black"
                   type="email"
@@ -86,8 +86,8 @@ const UserForm = ({ onSave, initialValues, hideForm }) => {
                   onChange={handleInputChange}
                 />
               </div>
-              <div class="flex flex-col">
-                <label for="name" class="">Full name</label>
+              <div className="flex flex-col">
+                <label htmlFor="name" className="">Full name</label>
                 <input
                   className="text-black"
                   type="text"
@@ -97,8 +97,8 @@ const UserForm = ({ onSave, initialValues, hideForm }) => {
                   onChange={handleInputChange}
                 />
               </div>
-              <div class="flex flex-col">
-                <label for="age" class="">Age</label>
+              <div className="flex flex-col">
+                <label htmlFor="age" className="">Age</label>
                 <input
                   className="text-black"
                   type="number"

@@ -2,29 +2,59 @@ import React, { useState, useEffect } from 'react';
 import User from '../User/User';
 import ButtonAddUser from '../User/ButtonAddUser';
 import UserForm from '../User/UserForm';
-import Error from '../Error/Error';
 // import { useAuth } from '../../context/Auth';
 // import axios from 'axios';
-import { fetchUsers, createUser, updateUser, deleteUserAction } from '../../features/userList/usersAction';
+import * as types from '../../redux/usersList/actionType'
 import { useSelector, useDispatch } from 'react-redux';
 
 const Users = () => {
     const [showForm, setShowForm] = useState(false);
     const [editUser, setEditUser] = useState(null);
     const [isEdit, setIsEdit] = useState(false);
-    const usersList = useSelector(state => state.usersList);
-    const { userToken } = useSelector((state) =>  state.auth)
-
+    const { usersList } = useSelector(state => state.usersList) || [];
+    const { token } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
     useEffect(() => {
-        // console.log(userToken)
-        dispatch(fetchUsers({accessToken: userToken}));
-      }, [dispatch, userToken]);
+
+        dispatch({
+            type: types.GET_USERS_START,
+            token: token,
+            onSuccess: (data) => {
+                // console.log('lay danh sach thanh cong')
+                // window.location.reload();
+            },
+            onError: (data) => {
+                // console.log('lay danh sach that bai')
+            },
+        });
+    }, [dispatch, token]);
     const handleSave = async (formData) => {
         if (editUser === null) {
-            dispatch(createUser({formData: formData, accessToken: userToken}))
+            dispatch({
+                type: types.ADD_USER_START,
+                token: token,
+                data: formData,
+                onSuccess: () => {
+                    // alert('thanh cong')
+                },
+                onFailure: () => {
+                    // alert('that bai')
+                }
+            })
         } else {
-            dispatch(updateUser({formData: formData, accessToken: userToken, userId: parseInt(editUser.id)}))
+            // dispatch(updateUser({formData: formData, accessToken: userToken, userId: parseInt(editUser.id)}))
+            dispatch({
+                type: types.UPDATE_USER_START,
+                token: token,
+                userId: parseInt(editUser.id),
+                data: formData,
+                onSuccess: () => {
+                    // alert('thanh cong')
+                },
+                onFailure: () => {
+                    // alert('that bai')
+                }
+            })
             setEditUser(null);
         }
     };
@@ -35,7 +65,17 @@ const Users = () => {
     };
 
     const deleteUser = async (id) => {
-        dispatch(deleteUserAction({accessToken: userToken, userId: id}))
+        dispatch({
+            type: types.DELETE_USER_START,
+            token: token,
+            userId: id,
+            onSuccess: () => {
+                console.log('delete success')
+            },
+            onFailure: () => {
+                console.log('delete fail')
+            }
+        })
     };
     return (
         <div className="h-full ml-14 mt-14 mb-10 md:ml-64 relative">
@@ -79,7 +119,7 @@ const Users = () => {
                             </tr>
                         </thead>
                         <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                            {usersList.map((user) => (
+                            {usersList?.map((user) => (
                                 <User
                                     user={user}
                                     key={user.username}
