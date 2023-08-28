@@ -5,10 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
+import { Link } from 'react-router-dom';
 
 const Login = () => {
   const {  user } = useSelector((state) => state.auth)
   
+
   const dispatch = useDispatch()
 
   const { register, handleSubmit } = useForm()
@@ -37,11 +39,13 @@ const Login = () => {
       },
 
     })
+
   }
   return (
     <div className='h-screen flex justify-center items-center'>
       <div className="bg-white p-8 rounded shadow-md w-96 h-fit">
         <h1 className="text-2xl font-semibold mb-4">Login</h1>
+
         <form onSubmit={handleSubmit(submitForm)}>
           <div className="mb-4">
             <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username</label>
@@ -72,14 +76,22 @@ const Login = () => {
             Login
           </button>
         </form>
+        <div className="mb-3 font-sembold text-sm flex justify-between">
+          <Link to={'/forgot-password'}
+            className='text-blue-500'>
+            Forgot password
+          </Link>
+          <Link to={'/register'}
+            className='text-blue-500'>
+            Register
+          </Link>
+        </div>
+
       </div>
     </div>
 
   )
 }
 
-// Login.propTypes = {
-//   setToken: PropTypes.func.isRequired
-// };
 
 export default Login

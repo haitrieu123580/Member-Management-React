@@ -8,6 +8,9 @@ import Footer from './components/Footer/Footer';
 import Sidebar from './components/Sidebar/Sidebar';
 import Users from './components/Dashboard/Users';
 import { AuthProvider } from './context/Auth';
+import Register from './pages/register/Register';
+import ForgotPassword from './pages/resetPassword/ForgotPassword';
+import ResetPassword from './components/forgotPassword/ResetPassword';
 // import { useState } from 'react';
 const App = () => {
   return (
@@ -20,6 +23,9 @@ const App = () => {
           <Route path="/home" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Users />} />
+          <Route path='/register' element={<Register/>}/>
+          <Route path='/forgot-password' element={<ForgotPassword/>}/>
+          <Route path='/reset-password' element={<ResetPassword/>}/>
         </Routes>
         <Footer/>
       </div>
