@@ -1,7 +1,6 @@
 
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux'
-import { type } from '@testing-library/user-event/dist/type';
 import * as types from '../../redux/auth/actionType'
 // import { logout } from '../../features/auth/authSlice'
 const Navbar = () => {

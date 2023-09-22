@@ -2,6 +2,7 @@ import * as types from './actionType'
 const initState = {
     token: localStorage.getItem('token')||null,
     user: localStorage.getItem('user')||null,
+    userId: localStorage.getItem('userId')||null,
     error: null,
     message: null,
 }
@@ -12,6 +13,7 @@ export const authReducer = (state = initState, action) => {
                 ...state,
                 token: action.payload.accessToken,
                 user: action.payload.message.username,
+                userId: action.payload.message.id,
                 message: 'Login thanh cong',
                 error: null
             }
@@ -28,6 +30,7 @@ export const authReducer = (state = initState, action) => {
                 ...state,
                 token: null,
                 user: null,
+                userId: null,
                 message: null,
                 error: null
             }

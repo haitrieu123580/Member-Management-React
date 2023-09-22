@@ -2,37 +2,24 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useForm } from 'react-hook-form'
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import * as types from '../../redux/auth/actionType'
 const ResetPassword = () => {
     const [message, setMessage] = useState('')
     const [isError, setIsError] = useState(false)
     const { register, handleSubmit, reset } = useForm();
+    const dispatch = useDispatch()
     const resetPass = async (data) => {
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        };
-        try {
-            const response = await axios.post('http://127.0.0.1:3000/auth/reset-password', JSON.stringify(data), config)
-            if (response.data.type === 'success' && response.status === 200) {
-                setMessage('Reset password success, Login plz')
-                setIsError(false)
-                reset()
-            }
-            else if (response.data.type === 'error' && response.status === 200) {
-                setMessage('Reset password failed')
-                setIsError(true)
-                reset()
-            }
-            else {
-                setIsError(true)
-                setMessage('Invalid')
-            }
+        dispatch({
+            type: types.RESET_PWD_START, 
+            data: data,
+            onSuccess: (message) =>{
 
-        } catch (error) {
-            setIsError(true)
-            setMessage('Error')
-        }
+            }, 
+            onError: (message) =>{
+
+            }
+        })
     }
     return (
         <div className='h-screen flex justify-center items-center'>

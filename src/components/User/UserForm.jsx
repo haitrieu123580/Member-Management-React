@@ -52,29 +52,29 @@ const UserForm = ({ onSave, initialValues, hideForm }) => {
               </div>
               {!hasInitialValues && (<>
                 <div className="flex flex-col">
-                <label htmlFor="password" className="">Password</label>
-                <input
-                  className="text-black"
-                  type="password"
-                  name="password"
-                  id='password'
-                  placeholder={formData.password || ''}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="flex flex-col">
-                <label htmlFor="confirmPassword" className="">Confirm Password</label>
-                <input
-                  className="text-black"
-                  type="password"
-                  name="confirmPassword"
-                  id='confirmPassword'
-                  placeholder={formData.confirmPassword || ''}
-                  onChange={handleInputChange}
-                />
-              </div>
+                  <label htmlFor="password" className="">Password</label>
+                  <input
+                    className="text-black"
+                    type="password"
+                    name="password"
+                    id='password'
+                    placeholder={formData.password || ''}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="flex flex-col">
+                  <label htmlFor="confirmPassword" className="">Confirm Password</label>
+                  <input
+                    className="text-black"
+                    type="password"
+                    name="confirmPassword"
+                    id='confirmPassword'
+                    placeholder={formData.confirmPassword || ''}
+                    onChange={handleInputChange}
+                  />
+                </div>
               </>)}
-              
+
               <div className="flex flex-col">
                 <label htmlFor="gender" className="">Email</label>
                 <input

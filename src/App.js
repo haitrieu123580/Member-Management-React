@@ -11,13 +11,14 @@ import { AuthProvider } from './context/Auth';
 import Register from './pages/register/Register';
 import ForgotPassword from './pages/resetPassword/ForgotPassword';
 import ResetPassword from './components/forgotPassword/ResetPassword';
-// import { useState } from 'react';
+import Profile from './pages/profile/Profile';
 const App = () => {
   return (
     <AuthProvider>
       <div className="App min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-white dark:bg-gray-700 text-black dark:text-white">
         <Navbar />
         <Sidebar/>
+        {/* <Profile/> */}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
@@ -26,6 +27,7 @@ const App = () => {
           <Route path='/register' element={<Register/>}/>
           <Route path='/forgot-password' element={<ForgotPassword/>}/>
           <Route path='/reset-password' element={<ResetPassword/>}/>
+          <Route path='/profile' element={<Profile/>}/>
         </Routes>
         <Footer/>
       </div>

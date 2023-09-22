@@ -2,38 +2,26 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import axios from 'axios'
+import { useDispatch } from 'react-redux'
+import * as types from '../../redux/auth/actionType'
 const ForgotPassword = () => {
     const { register, handleSubmit, reset } = useForm()
     const [message, setMessage] = useState('')
     const [isError, setIsError] = useState(false)
     const [showButton, setShowButton] = useState(false)
-    const sendToken = async (data) => {
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        };
-        try {
-            const response = await axios.post('http://127.0.0.1:3000/auth/forgot-password', JSON.stringify(data), config)
-            if (response.data.type === 'success') {
-                setMessage('Check your Email Plz!')
-                setIsError(false)
+    const dispatch = useDispatch()
+    const sendToken =  (data) => {
+        dispatch({
+            type: types.FORGOT_PWD_START, 
+            email: data, 
+            onSuccess: (message) =>{
+                setMessage('Check your Email Plz!');
                 setShowButton(true)
-                reset()
+            }, 
+            onError: (message) =>{
+                
             }
-            else if (response.data.type === 'error') {
-                setMessage('Email not valid')
-                setIsError(true)
-                setShowButton(false)
-                reset()
-            }
-            else {
-                setMessage('Error')
-                setShowButton(false)
-                setIsError(true)
-            }
-        } catch (error) {
-        }
+        })
     }
     return (
         <div className=''>
